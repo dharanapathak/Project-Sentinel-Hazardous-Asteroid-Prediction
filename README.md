@@ -1,182 +1,98 @@
-# 🚀 Project Sentinel – Hazardous Asteroid Prediction
+# Project Sentinel — Hazardous Asteroid Prediction
 
-An end-to-end Machine Learning project that predicts potentially hazardous asteroids using Near-Earth Object (NEO) data. The project applies data preprocessing, exploratory data analysis, feature engineering, and classification algorithms to identify patterns associated with potentially hazardous asteroids.
+An educational machine-learning project that predicts the dataset-defined `hazardous` / `non-hazardous` label for Near-Earth Object (NEO) records using tabular characteristics.
 
-## 📌 Project Overview
+> **Scientific limitation:** This is a supervised-learning exercise on historical dataset labels. It is not an official NASA/JPL risk assessment, orbital calculation, impact-probability model, or planetary-defence tool. Do not use its predictions for real-world safety decisions.
 
-Project Sentinel aims to build a Machine Learning classification system that analyzes asteroid-related features and predicts whether an asteroid is potentially hazardous or non-hazardous.
+## Features
+- Data validation and preprocessing
+- Exploratory data analysis in the original Jupyter notebook
+- Stratified train/test split
+- Logistic Regression and Random Forest model comparison
+- Class-imbalance handling with class weights
+- Cross-validation and compact Random Forest hyperparameter search
+- Held-out evaluation: precision, recall, F1, ROC-AUC, average precision and confusion matrix
+- Permutation feature importance
+- Reproducible training script that saves the fitted preprocessing/model pipeline
+- Streamlit interface to upload a CSV, train a model, inspect metrics and try predictions
+- Unit tests for data preparation and inference input validation
 
-The project demonstrates how Machine Learning techniques can be applied to astronomical datasets for data analysis and classification.
-
-## 🎯 Objectives
-
-- Analyze Near-Earth Object (NEO) data.
-- Perform data cleaning and preprocessing.
-- Explore important patterns through EDA.
-- Build classification models.
-- Evaluate model performance using standard metrics.
-- Develop an interactive prediction interface.
-
-## 🛠️ Technologies Used
-
-- **Programming Language:** Python
-- **Data Analysis:** Pandas, NumPy
-- **Visualization:** Matplotlib, Seaborn
-- **Machine Learning:** Scikit-learn
-- **Algorithms:** Logistic Regression, Random Forest
-- **Application:** Streamlit
-- **Model Evaluation:** Accuracy, Precision, Recall, F1-score, ROC-AUC
-
-## 📂 Project Structure
-
+## Repository layout
 ```text
 Project-Sentinel-Hazardous-Asteroid-Prediction/
-│
-├── data/
-│   └── README.md
-│
-├── models/
-│   └── .gitkeep
-│
-├── notebooks/
-│   └── hazardous_asteroid_prediction_final.ipynb
-│
-├── src/
-│   ├── __init__.py
-│   ├── preprocessing.py
-│   └── modeling.py
-│
-├── tests/
-│   ├── test_preprocessing.py
-│   └── test_modeling.py
-│
 ├── app.py
 ├── train.py
 ├── requirements.txt
+├── .gitignore
 ├── README.md
-└── .gitignore
+├── data/
+│   └── README.md
+├── models/
+│   └── .gitkeep
+├── notebooks/
+│   └── hazardous_asteroid_prediction_final.ipynb
+├── src/
+│   ├── __init__.py
+│   ├── modeling.py
+│   └── preprocessing.py
+└── tests/
+    ├── test_preprocessing.py
+    └── test_modeling.py
 ```
 
-## ⚙️ Installation and Setup
+## Dataset
+The notebook you supplied was executed against a CSV with **90,836 rows and 10 columns**, including the target column `hazardous`. The CSV itself was not included with the uploaded notebook, so it is intentionally not fabricated or bundled here.
 
-### 1. Clone the Repository
+Place the authorized dataset file at `data/neo.csv`. The CSV should include a binary/boolean `hazardous` column and fields such as:
+- `est_diameter_min`
+- `est_diameter_max`
+- `relative_velocity`
+- `miss_distance`
+- `absolute_magnitude`
 
-```bash
-git clone https://github.com/YOUR-USERNAME/Project-Sentinel-Hazardous-Asteroid-Prediction.git
-```
+The training pipeline excludes identifiers and descriptive fields such as `id`, `name`, `orbiting_body`, and `sentry_object` from model inputs. See `data/README.md` for dataset handling guidance. Only upload the dataset to GitHub if its license and source terms permit redistribution.
 
-### 2. Navigate to the Project Directory
-
-```bash
-cd Project-Sentinel-Hazardous-Asteroid-Prediction
-```
-
-### 3. Create a Virtual Environment
-
-```bash
-python -m venv venv
-```
-
-Activate it on Windows:
-
-```bash
-venv\Scripts\activate
-```
-
-### 4. Install Dependencies
-
-```bash
+## Setup (Windows PowerShell)
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## 📊 Dataset Setup
-
-Place the authorized Near-Earth Object dataset CSV file inside the `data/` directory.
-
-Expected file path:
-
-```text
-data/neo.csv
+## Train the model
+After placing the CSV at `data/neo.csv`:
+```powershell
+python train.py --data data/neo.csv --output models/asteroid_pipeline.joblib
 ```
+The script prints held-out metrics and saves a single fitted pipeline containing preprocessing and the selected estimator.
 
-The dataset is not included in this repository. Make sure the dataset has the columns expected by the preprocessing and training scripts.
-
-## 🚀 Run the Project
-
-### Train the Machine Learning Models
-
-```bash
-python train.py
-```
-
-This runs the training and evaluation pipeline and saves the trained model when the required dataset is available.
-
-### Launch the Streamlit Application
-
-```bash
+## Run the interactive app
+```powershell
 streamlit run app.py
 ```
+Upload the NEO CSV in the app, train the model, then enter the predictor values to get a model output. The app also supports loading a previously trained `models/asteroid_pipeline.joblib` file if present.
 
-## 🤖 Machine Learning Models
-
-The project explores the following classification algorithms:
-
-1. **Logistic Regression:** A baseline classification algorithm.
-2. **Random Forest Classifier:** An ensemble learning algorithm used for classification.
-
-Hyperparameter tuning and cross-validation are included to improve model evaluation.
-
-## 📈 Model Evaluation
-
-The notebook evaluates the models using:
-
-- Accuracy
-- Precision
-- Recall
-- F1-score
-- ROC-AUC
-- Confusion Matrix
-- Feature Importance
-
-The notebook's reported evaluation metrics include:
-
-| Metric | Result |
-|---|---:|
-| Accuracy | 78.59% |
-| Hazardous Class Precision | 30.42% |
-| Hazardous Class Recall | 93.21% |
-| Hazardous Class F1-score | 45.87% |
-| ROC-AUC | 87.94% |
-
-**Note:** These are results from the notebook's evaluation. The model is an educational classification project and must not be used for real-world asteroid impact-risk decisions.
-
-## 🧪 Run Tests
-
-```bash
+## Run tests
+```powershell
 pytest -q
 ```
 
-## 🔮 Future Enhancements
+## Results recorded in the supplied notebook
+The notebook's saved output reports the following held-out test metrics from its previous execution:
+| Metric | Recorded value |
+|---|---:|
+| Accuracy | 0.785942 |
+| Precision (hazardous) | 0.304227 |
+| Recall (hazardous) | 0.932127 |
+| F1 (hazardous) | 0.458733 |
+| ROC-AUC | 0.879441 |
+| Average Precision | 0.326208 |
 
-- Integrate updated astronomical datasets.
-- Experiment with advanced Machine Learning algorithms.
-- Improve hazardous-class precision.
-- Add more interactive data visualizations.
-- Deploy the application on a cloud platform.
-- Explore deep learning approaches for classification.
+These are historical saved notebook outputs, not a guarantee that a fresh run will reproduce identical values. Results can vary if the dataset or software versions differ. The relatively low hazardous-class precision means many positive predictions are false positives; accuracy alone is not sufficient for judging this imbalanced classification task.
 
-## 👩‍💻 Author
-
-**Dharana Pathak**
-
-Machine Learning | Python | Artificial Intelligence | Data Science
-
-## ⭐ Acknowledgements
-
-This project was developed as a hands-on Machine Learning project to explore data preprocessing, classification, model evaluation, and interactive application development.
-
----
-
-If you find this project interesting, feel free to explore the repository and share your feedback!
-
-**⭐ Don't forget to star the repository!**
+## Important notes
+- The saved `.joblib` model artifact was not present in the uploaded files. Generate it by running `train.py`.
+- The source dataset was not present in the upload. Obtain it from the source authorized for your assignment and keep it in `data/neo.csv`.
+- Do not commit private data, API keys, virtual environments, or large files without checking repository and dataset permissions.
+- Model probabilities are classifier scores for the dataset label, not calibrated probabilities of an asteroid impact.
